@@ -31,6 +31,14 @@ namespace Batch_Update
                 oApp.RegisterMenuEventHandler(MyMenu.SBO_Application_MenuEvent);
                 Application.SBO_Application.AppEvent += new SAPbouiCOM._IApplicationEvents_AppEventEventHandler(SBO_Application_AppEvent);
                 oCompany = (SAPbobsCOM.Company)Application.SBO_Application.Company.GetDICompany();
+
+                List<ComboList> SealStatus = new List<ComboList>();
+                SealStatus.Add(new ComboList { Value = "1", Description = "Null" });
+                SealStatus.Add(new ComboList { Value = "2", Description = "Success" });
+                SealStatus.Add(new ComboList { Value = "3", Description = "Failed" });
+
+                TableCreate.CreateUserFields("ORDR", "SealStatus", "Seal Status", SAPbobsCOM.BoFieldTypes.db_Alpha, 10, SAPbobsCOM.BoFldSubTypes.st_None, combolist: SealStatus);
+
                 oApp.Run();
             }
             catch (Exception ex)

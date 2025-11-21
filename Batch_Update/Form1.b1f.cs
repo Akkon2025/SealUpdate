@@ -198,7 +198,7 @@ namespace Batch_Update
                                     // Grid0.DataTable.SetValue(7, i, errMsg);
                                     if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
                                     {
-                                        oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "Failed";
+                                        oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "3";// "Failed";
                                         oSalesOrder.Update();
                                         failCount++;
                                     }
@@ -212,7 +212,7 @@ namespace Batch_Update
                                     SAPbobsCOM.Documents oUpdateDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
                                     if (oUpdateDoc.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
                                     {
-                                        oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "Success";
+                                        oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "2";// "Success";
                                         oUpdateDoc.Update();
                                         successCount++;
                                     }
@@ -300,76 +300,139 @@ namespace Batch_Update
             {
                 string containerNo = "";
 
+                int successCount = 0;
+                int failCount = 0;
+
+                int totalRows = Grid0.Rows.Count;
+
+                #region 20.11.2025 kod iyileştirmesi özge
+
+
+                for (int i = 0; i <= Grid0.Rows.Count - 1; i++)
+                {
+                     
+                    Application.SBO_Application.StatusBar.SetText((i + 1).ToString() + " / " + totalRows.ToString() + " - update in BL", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
+                     
+                    string xx = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString();
+                    // Sales order docentrye göre sales order satırlarını gezip seal güncelliyor
+                    SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
+                    oSalesOrder.GetByKey(Convert.ToInt32(xx)); // docentrysine göre sales order bilgilerini getiriyor
+
+                    oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
+                 
+                    //sales order satırlarını geziyor
+                    oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString(); //seal no alanını güncelliyor.
+                    oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value = Convert.ToInt32(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString());
+
+                    int ret = oSalesOrder.Update();
+
+                    if (ret != 0)
+                    {
+                        // Application.SBO_Application.MessageBox(containerNo + "için: " + oCompany.GetLastErrorDescription().ToString());
+                        string errMsg = oCompany.GetLastErrorDescription();
+                        Logger.Log(containerNo + "için: " + errMsg.ToString());
+                        Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                        //Grid0.DataTable.Columns.Item(7).Cells.Item(i).Value = errMsg.ToString();
+                        if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
+                        {
+                            oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "3";// "Failed";
+                            oSalesOrder.Update();
+                            failCount++;
+                        }
+
+                        Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                    
+                        continue;
+                    }
+                    else
+                    {
+                        SAPbobsCOM.Documents oUpdateDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
+                        if (oUpdateDoc.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
+                        {
+                            oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "2";// "Success";
+                            oUpdateDoc.Update();
+                            successCount++;
+                        }
+
+                    }
+             
+
+                } 
+                #endregion
+
+
                 try
                 {
 
-                    int successCount = 0;
-                    int failCount = 0;
+                    #region gereksiz for döngüsü
+                    //int successCount = 0;
+                    //int failCount = 0;
 
-                    int batchSize = 60;
-                    int rowCount = Grid0.Rows.Count;
-                    int batchCount = (rowCount + batchSize - 1) / batchSize;
+                    //int batchSize = 60;
+                    //int rowCount = Grid0.Rows.Count;
+                    //int batchCount = (rowCount + batchSize - 1) / batchSize;
 
-                    for (int batchIndex = 0; batchIndex < batchCount; batchIndex++)
-                    {
-                        for (int i = batchIndex * batchSize; i < Math.Min(rowCount, (batchIndex + 1) * batchSize); i++)
-                        {
-                            try
-                            {
-                                SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
-                                oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString())); // docentrysine göre sales order bilgilerini getiriyor
+                    //for (int batchIndex = 0; batchIndex < batchCount; batchIndex++)
+                    //{
+                    //    for (int i = batchIndex * batchSize; i < Math.Min(rowCount, (batchIndex + 1) * batchSize); i++)
+                    //    {
+                    //        try
+                    //        {
+                    //            SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
+                    //            oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString())); // docentrysine göre sales order bilgilerini getiriyor
 
-                                containerNo = Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                    //            containerNo = Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
 
-                                oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
+                    //            oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
 
-                                //sales order satırlarını geziyor
-                                oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = CleanInput(Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString());
-                                oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value = Convert.ToInt32(CleanInput(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString()));
-                                 
+                    //            //sales order satırlarını geziyor
+                    //            oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = CleanInput(Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString());
+                    //            oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value = Convert.ToInt32(CleanInput(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString()));
 
-                                int ret = oSalesOrder.Update();
 
-                                if (ret != 0)
-                                {
-                                    // Application.SBO_Application.MessageBox(containerNo + "için: " + oCompany.GetLastErrorDescription().ToString());
-                                    string errMsg = oCompany.GetLastErrorDescription();
-                                    Logger.Log(containerNo + "için: " + errMsg.ToString());
-                                    Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
-                                    //Grid0.DataTable.Columns.Item(7).Cells.Item(i).Value = errMsg.ToString();
-                                    if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
-                                    {
-                                        oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "Failed";
-                                        oSalesOrder.Update();
-                                        failCount++;
-                                    }
+                    //            int ret = oSalesOrder.Update();
 
-                                    Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                    //            if (ret != 0)
+                    //            {
+                    //                // Application.SBO_Application.MessageBox(containerNo + "için: " + oCompany.GetLastErrorDescription().ToString());
+                    //                string errMsg = oCompany.GetLastErrorDescription();
+                    //                Logger.Log(containerNo + "için: " + errMsg.ToString());
+                    //                Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                    //                //Grid0.DataTable.Columns.Item(7).Cells.Item(i).Value = errMsg.ToString();
+                    //                if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
+                    //                {
+                    //                    oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "3";// "Failed";
+                    //                    oSalesOrder.Update();
+                    //                    failCount++;
+                    //                }
 
-                                    continue;
-                                }
-                                else
-                                {
-                                    SAPbobsCOM.Documents oUpdateDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
-                                    if (oUpdateDoc.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
-                                    {
-                                        oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "Success";
-                                        oUpdateDoc.Update();
-                                        successCount++;
-                                    }
-                                     
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.Log($"{containerNo} için beklenmeyen hata: {ex.Message}");
-                                Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                    //                Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
 
-                                continue;
-                            }
-                           
-                        }
-                    }
+                    //                continue;
+                    //            }
+                    //            else
+                    //            {
+                    //                SAPbobsCOM.Documents oUpdateDoc = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders);
+                    //                if (oUpdateDoc.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
+                    //                {
+                    //                    oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "2";// "Success";
+                    //                    oUpdateDoc.Update();
+                    //                    successCount++;
+                    //                }
+
+                    //            }
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            Logger.Log($"{containerNo} için beklenmeyen hata: {ex.Message}");
+                    //            Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+
+                    //            continue;
+                    //        }
+
+                    //    }
+                    //} 
+                    #endregion
 
                     //Application.SBO_Application.MessageBox(+Grid0.Rows.Count + " BL - Seal No / Vgm Updated");
 
@@ -437,25 +500,7 @@ namespace Batch_Update
                     Application.SBO_Application.MessageBox("Error Code = 5001 - " + containerNo + ex.ToString());
                 }
 
-                //eski kod tekrar bu hale getirebiliriz.
-                //for (int i = 0; i <= Grid0.Rows.Count -1; i++)
-                // {
-                 
-                //     // Sales order docentrye göre sales order satırlarını gezip seal güncelliyor
-                //     SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
-                //     oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString())); // docentrysine göre sales order bilgilerini getiriyor
-
-                //     oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
-
-                //       //sales order satırlarını geziyor
-                //     oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString(); //seal no alanını güncelliyor.
-                //     oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value =  Convert.ToInt32(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString());
-
-                //     int ret = oSalesOrder.Update();
-
-                //     // SATIR GÜNCELLEMEDE KULLANILIYOR .... ------> //Lines.UserFields.Fields.Item("U_VOYAGE").Value = "5";
-                //     //duygu.ozer@ideateknoloji.com.tr
-                // }
+               
             }
         }
          
