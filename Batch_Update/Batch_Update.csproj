@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="B1s\Batch_Update.b1s" />
     <None Include="Form1.b1f">
       <FormCategory>UserForm</FormCategory>
     </None>
