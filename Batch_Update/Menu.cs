@@ -24,6 +24,9 @@ namespace Batch_Update
             oCreationPackage.Enabled = true;
             oCreationPackage.Position = -1;
 
+            string path1;
+            path1 = System.Windows.Forms.Application.StartupPath + "\\Logo.jpg";
+
             oMenus = oMenuItem.SubMenus;
 
             try

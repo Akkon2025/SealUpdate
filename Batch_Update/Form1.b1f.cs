@@ -22,9 +22,9 @@ namespace Batch_Update
             {
                 try
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));  
+                    Directory.CreateDirectory(Path.GetDirectoryName(logFilePath));
                     string logMessage = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
-                     
+
                     File.AppendAllText(logFilePath, logMessage + Environment.NewLine, Encoding.UTF8);
                 }
                 catch (Exception ex)
@@ -63,12 +63,17 @@ namespace Batch_Update
 
         public override void OnInitializeFormEvents()
         {
+            this.ResizeAfter += new ResizeAfterHandler(this.Form_ResizeAfter);
+
         }
 
         private SAPbouiCOM.Grid Grid0;
 
         private void OnCustomInitialize()
         {
+            SAPbouiCOM.Form oFormMenu = SAPbouiCOM.Framework.Application.SBO_Application.Forms.GetForm("169", 0);
+
+            this.UIAPIRawForm.Left = oFormMenu.Left + oFormMenu.Width + 20;
         }
         public SAPbouiCOM.Form oForm;
         public SAPbouiCOM.DataTable dt;
@@ -127,9 +132,9 @@ namespace Batch_Update
             {
                 sql += "AND T0.\"U_HBLVoyage\" = '" + hblvoy + "'";
             }
-            if (status !="")
+            if (status != "")
             {
-                sql += "AND T0.\"U_SealStatus\"='"+status+"'";
+                sql += "AND T0.\"U_SealStatus\"='" + status + "'";
             }
 
 
@@ -144,9 +149,9 @@ namespace Batch_Update
             Grid0.Columns.Item(3).Editable = false;
             Grid0.Columns.Item(6).Editable = false;
             //Grid0.Columns.Item(7).Editable = false;
-            Logger.Log( "Listeleme geldi");
+            Logger.Log("Listeleme geldi");
         }
-       
+
         private string CleanInput(string input)
         {
             if (string.IsNullOrEmpty(input)) return string.Empty;
@@ -164,14 +169,14 @@ namespace Batch_Update
 
             if (Grid0.Rows.SelectedRows.Count > 0)
             {
-                string cntNo = ""; 
+                string cntNo = "";
 
                 try
                 {
                     int successCount = 0;
                     int failCount = 0;
 
-                    for (int i = 0; i < Grid0.Rows.Count; i++) 
+                    for (int i = 0; i < Grid0.Rows.Count; i++)
                     {
                         if (Grid0.Rows.IsSelected(i))
                         {
@@ -185,7 +190,7 @@ namespace Batch_Update
                                 oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
 
                                 //sales order satırlarını geziyor
-                                oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = CleanInput(Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString());  
+                                oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = CleanInput(Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString());
                                 oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value = Convert.ToInt32(CleanInput(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString()));
 
                                 int ret = oSalesOrder.Update();
@@ -193,7 +198,7 @@ namespace Batch_Update
                                 if (ret != 0)
                                 {
                                     string errMsg = oCompany.GetLastErrorDescription();
-                                    
+
                                     Logger.Log($"{cntNo} için hata: {errMsg}");
                                     // Grid0.DataTable.SetValue(7, i, errMsg);
                                     if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
@@ -216,7 +221,7 @@ namespace Batch_Update
                                         oUpdateDoc.Update();
                                         successCount++;
                                     }
-                                     
+
                                 }
                             }
                             catch (Exception ex)
@@ -225,8 +230,8 @@ namespace Batch_Update
                                 Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
 
                                 continue;
-                            } 
-                        } 
+                            }
+                        }
                     }
 
                     Application.SBO_Application.MessageBox(+Grid0.Rows.SelectedRows.Count + " BL - Seal No / Vgm Updated");
@@ -253,7 +258,7 @@ namespace Batch_Update
                             AND T0.""Confirmed"" = 'Y'
                         ORDER BY T1.U_CONTAINERNO ASC
                         ";
-                     
+
                     sql = sql.Replace("@voyage", "'" + voyage + "'")
                              .Replace("@pol", "'" + pol + "'")
                              .Replace("@pod", "'" + pod + "'");
@@ -280,7 +285,7 @@ namespace Batch_Update
                     //    Grid0.DataTable = dt;
                     //}
                     #endregion
-                   
+
                     this.Grid0.DataTable = dt;
 
                     Grid0.Columns.Item(0).Editable = false;
@@ -310,16 +315,16 @@ namespace Batch_Update
 
                 for (int i = 0; i <= Grid0.Rows.Count - 1; i++)
                 {
-                     
+
                     Application.SBO_Application.StatusBar.SetText((i + 1).ToString() + " / " + totalRows.ToString() + " - update in BL", SAPbouiCOM.BoMessageTime.bmt_Short, SAPbouiCOM.BoStatusBarMessageType.smt_Warning);
-                     
+
                     string xx = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString();
                     // Sales order docentrye göre sales order satırlarını gezip seal güncelliyor
                     SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
                     oSalesOrder.GetByKey(Convert.ToInt32(xx)); // docentrysine göre sales order bilgilerini getiriyor
 
                     oSalesOrder.Lines.SetCurrentLine(Convert.ToInt32(Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value));
-                 
+
                     //sales order satırlarını geziyor
                     oSalesOrder.Lines.UserFields.Fields.Item("U_SEALNO").Value = Grid0.DataTable.Columns.Item(4).Cells.Item(i).Value.ToString(); //seal no alanını güncelliyor.
                     oSalesOrder.Lines.UserFields.Fields.Item("U_VGM").Value = Convert.ToInt32(Grid0.DataTable.Columns.Item(5).Cells.Item(i).Value.ToString());
@@ -341,7 +346,7 @@ namespace Batch_Update
                         }
 
                         Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
-                    
+
                         continue;
                     }
                     else
@@ -355,9 +360,9 @@ namespace Batch_Update
                         }
 
                     }
-             
 
-                } 
+
+                }
                 #endregion
 
 
@@ -466,9 +471,9 @@ namespace Batch_Update
 
                     dt.ExecuteQuery(sql);
                     Grid0.DataTable = dt;
-                     
+
                     #region Sorgu sadeleştirildi.
-                     
+
                     //if (EditText0.Value != "" && EditText1.Value != "" && EditText2.Value != "")
                     //{
                     //    dt.ExecuteQuery("select DISTINCT  T0.\"DocEntry\"  as \"DocEntry\",  T1.\"VisOrder\"  ,U_BLAKKONNO as \" BL Akkon No \" ,T1.U_CONTAINERNO as \"Container No\", T1.U_SEALNO AS \"Seal No\" , T1.\"U_VGM\" AS \"VGM\"FROM ORDR T0 LEFT JOIN RDR1 T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" WHERE T0.U_VOYAGE = '" + EditText0.Value.ToString() + "' AND T0.U_PORTOFLOADING = '" + EditText1.Value.ToString() + "' AND T0.U_PORTOFDISCHARGE = '" + EditText2.Value.ToString() + "' AND T0.\"DocStatus\" = 'O' AND T0.U_QUOT_APPROSTAT = 'Yes' AND T0.\"Confirmed\" = 'Y'  ORDER BY T1.U_CONTAINERNO  ASC  ");
@@ -500,10 +505,10 @@ namespace Batch_Update
                     Application.SBO_Application.MessageBox("Error Code = 5001 - " + containerNo + ex.ToString());
                 }
 
-               
+
             }
         }
-         
+
         private SAPbouiCOM.EditText EditText0;
         private SAPbouiCOM.EditText EditText1;
         private SAPbouiCOM.EditText EditText2;
@@ -518,5 +523,14 @@ namespace Batch_Update
         private SAPbouiCOM.EditText EditText3;
         private SAPbouiCOM.StaticText StaticText6;
         private SAPbouiCOM.EditText EditText4;
+
+        private void Form_ResizeAfter(SAPbouiCOM.SBOItemEventArg pVal)
+        {
+            int formHeight = this.UIAPIRawForm.Height;
+            int editTop = this.UIAPIRawForm.Items.Item("Item_4").Top;
+            int gridHeight = this.UIAPIRawForm.Items.Item("Item_0").Height;
+
+            this.UIAPIRawForm.Items.Item("Item_0").Top = formHeight - (formHeight - editTop) - gridHeight - 10;
+        }
     }
 }
