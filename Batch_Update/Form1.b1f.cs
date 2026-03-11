@@ -523,7 +523,7 @@ namespace Batch_Update
         private SAPbouiCOM.EditText EditText3;
         private SAPbouiCOM.StaticText StaticText6;
         private SAPbouiCOM.EditText EditText4;
-
+        //
         private void Form_ResizeAfter(SAPbouiCOM.SBOItemEventArg pVal)
         {
             int formHeight = this.UIAPIRawForm.Height;
