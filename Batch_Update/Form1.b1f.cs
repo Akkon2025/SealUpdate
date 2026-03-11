@@ -529,8 +529,12 @@ namespace Batch_Update
             int formHeight = this.UIAPIRawForm.Height;
             int editTop = this.UIAPIRawForm.Items.Item("Item_4").Top;
             int gridHeight = this.UIAPIRawForm.Items.Item("Item_0").Height;
+            int VoyageTop = this.UIAPIRawForm.Items.Item("Item_1").Top;
 
-            this.UIAPIRawForm.Items.Item("Item_0").Top = formHeight - (formHeight - editTop) - gridHeight - 10;
+
+            this.UIAPIRawForm.Items.Item("Item_0").Top = 10;// formHeight - (formHeight - editTop) - gridHeight - 10;
+
+            this.UIAPIRawForm.Items.Item("Item_0").Height = VoyageTop - 20;
         }
     }
 }
