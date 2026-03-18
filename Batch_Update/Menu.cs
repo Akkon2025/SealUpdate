@@ -27,7 +27,10 @@ namespace Batch_Update
             string path1;
             path1 = System.Windows.Forms.Application.StartupPath + "\\Logo.jpg";
 
+            oCreationPackage.Image = path1;
+
             oMenus = oMenuItem.SubMenus;
+
 
             try
             {
@@ -53,7 +56,7 @@ namespace Batch_Update
             }
             catch (Exception er)
             { //  Menu already exists
-                Application.SBO_Application.SetStatusBarMessage("Menu Already Exists", SAPbouiCOM.BoMessageTime.bmt_Short, true);
+                //Application.SBO_Application.SetStatusBarMessage("Menu Already Exists", SAPbouiCOM.BoMessageTime.bmt_Short, true);
             }
         }
 

@@ -526,15 +526,58 @@ namespace Batch_Update
         //
         private void Form_ResizeAfter(SAPbouiCOM.SBOItemEventArg pVal)
         {
-            int formHeight = this.UIAPIRawForm.Height;
-            int editTop = this.UIAPIRawForm.Items.Item("Item_4").Top;
-            int gridHeight = this.UIAPIRawForm.Items.Item("Item_0").Height;
-            int VoyageTop = this.UIAPIRawForm.Items.Item("Item_1").Top;
+            try
+            {
+                int formHeight = this.UIAPIRawForm.Height;
+                int editTop = this.UIAPIRawForm.Items.Item("Item_4").Top;
+                int gridHeight = this.UIAPIRawForm.Items.Item("Item_0").Height;
 
+                int aa = this.UIAPIRawForm.Items.Item("Item_18").Height;
 
-            this.UIAPIRawForm.Items.Item("Item_0").Top = 10;// formHeight - (formHeight - editTop) - gridHeight - 10;
+                this.UIAPIRawForm.Items.Item("Item_18").Top = formHeight - 75;
+                this.UIAPIRawForm.Items.Item("Item_20").Top = formHeight - 75;
+                this.UIAPIRawForm.Items.Item("Item_21").Top = formHeight - 75;
+                this.UIAPIRawForm.Items.Item("Item_22").Top = formHeight - 75;
 
-            this.UIAPIRawForm.Items.Item("Item_0").Height = VoyageTop - 20;
+                int successTop = this.UIAPIRawForm.Items.Item("Item_18").Top;
+
+                this.UIAPIRawForm.Items.Item("Item_16").Top = successTop - 30;
+                this.UIAPIRawForm.Items.Item("Item_15").Top = successTop - 30;
+                this.UIAPIRawForm.Items.Item("Item_14").Top = successTop - 46;
+                this.UIAPIRawForm.Items.Item("Item_13").Top = successTop - 46;
+                this.UIAPIRawForm.Items.Item("Item_12").Top = successTop - 62;
+                this.UIAPIRawForm.Items.Item("Item_11").Top = successTop - 62;
+                this.UIAPIRawForm.Items.Item("Item_10").Top = successTop - 78;
+                this.UIAPIRawForm.Items.Item("Item_9").Top = successTop - 78;
+
+                int statusTop = this.UIAPIRawForm.Items.Item("Item_15").Top;
+                int hblVoyageTop = this.UIAPIRawForm.Items.Item("Item_13").Top;
+                int hblPolTop = this.UIAPIRawForm.Items.Item("Item_11").Top;
+                int srvTop = this.UIAPIRawForm.Items.Item("Item_9").Top;
+
+                this.UIAPIRawForm.Items.Item("Item_8").Top = statusTop;
+                this.UIAPIRawForm.Items.Item("Item_7").Top = statusTop;
+                this.UIAPIRawForm.Items.Item("Item_6").Top = hblVoyageTop;
+                this.UIAPIRawForm.Items.Item("Item_3").Top = hblVoyageTop;
+                this.UIAPIRawForm.Items.Item("Item_5").Top = hblPolTop;
+                this.UIAPIRawForm.Items.Item("Item_2").Top = hblPolTop;
+                this.UIAPIRawForm.Items.Item("Item_4").Top = srvTop;
+                this.UIAPIRawForm.Items.Item("Item_1").Top = srvTop;
+
+                int voyageTop = this.UIAPIRawForm.Items.Item("Item_1").Top;
+                int podTop = this.UIAPIRawForm.Items.Item("Item_3").Top;
+
+                this.UIAPIRawForm.Items.Item("Item_17").Top = voyageTop;
+                this.UIAPIRawForm.Items.Item("Item_19").Top = podTop;
+
+                this.UIAPIRawForm.Items.Item("Item_0").Top = 10;// formHeight - (formHeight - editTop) - gridHeight - 10;
+                this.UIAPIRawForm.Items.Item("Item_0").Height = voyageTop - 20;
+            }
+            catch (Exception ex)
+            {
+                SAPbouiCOM.Framework.Application.SBO_Application.MessageBox("An error occurred in form sizing! " + ex.ToString());
+            }
+            
         }
     }
 }
