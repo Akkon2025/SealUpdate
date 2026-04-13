@@ -20,7 +20,7 @@ namespace Batch_Update
 
             oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_POPUP;
             oCreationPackage.UniqueID = "Seal_Update";
-            oCreationPackage.String = "Seal_Update";
+            oCreationPackage.String = "Seal Update";
             oCreationPackage.Enabled = true;
             oCreationPackage.Position = -1;
 

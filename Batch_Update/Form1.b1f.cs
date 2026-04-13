@@ -528,56 +528,184 @@ namespace Batch_Update
         {
             try
             {
-                int formHeight = this.UIAPIRawForm.Height;
-                int editTop = this.UIAPIRawForm.Items.Item("Item_4").Top;
-                int gridHeight = this.UIAPIRawForm.Items.Item("Item_0").Height;
+                #region MyRegion
+                //Grid0.Item.Top = 10;
+                //Grid0.Item.Left = 10;
+                //Grid0.Item.Height = this.UIAPIRawForm.Height - (this.UIAPIRawForm.Height / 3);
 
-                int aa = this.UIAPIRawForm.Items.Item("Item_18").Height;
+                //this.UIAPIRawForm.Items.Item("Item_1").Top = Grid0.Item.Top + Grid0.Item.Height + 10;
 
-                this.UIAPIRawForm.Items.Item("Item_18").Top = formHeight - 75;
-                this.UIAPIRawForm.Items.Item("Item_20").Top = formHeight - 75;
-                this.UIAPIRawForm.Items.Item("Item_21").Top = formHeight - 75;
-                this.UIAPIRawForm.Items.Item("Item_22").Top = formHeight - 75;
+                //int VoyageStaticTextTop = this.UIAPIRawForm.Items.Item("Item_1").Top;
+                //int VoyageStaticTextHeight = this.UIAPIRawForm.Items.Item("Item_1").Height;
 
-                int successTop = this.UIAPIRawForm.Items.Item("Item_18").Top;
 
-                this.UIAPIRawForm.Items.Item("Item_16").Top = successTop - 30;
-                this.UIAPIRawForm.Items.Item("Item_15").Top = successTop - 30;
-                this.UIAPIRawForm.Items.Item("Item_14").Top = successTop - 46;
-                this.UIAPIRawForm.Items.Item("Item_13").Top = successTop - 46;
-                this.UIAPIRawForm.Items.Item("Item_12").Top = successTop - 62;
-                this.UIAPIRawForm.Items.Item("Item_11").Top = successTop - 62;
-                this.UIAPIRawForm.Items.Item("Item_10").Top = successTop - 78;
-                this.UIAPIRawForm.Items.Item("Item_9").Top = successTop - 78;
+                //this.UIAPIRawForm.Items.Item("Item_4").Top = VoyageStaticTextTop;
+                //this.UIAPIRawForm.Items.Item("Item_17").Top = VoyageStaticTextTop;
+                //this.UIAPIRawForm.Items.Item("Item_9").Top = VoyageStaticTextTop;
+                //this.UIAPIRawForm.Items.Item("Item_10").Top = VoyageStaticTextTop;
 
-                int statusTop = this.UIAPIRawForm.Items.Item("Item_15").Top;
-                int hblVoyageTop = this.UIAPIRawForm.Items.Item("Item_13").Top;
-                int hblPolTop = this.UIAPIRawForm.Items.Item("Item_11").Top;
-                int srvTop = this.UIAPIRawForm.Items.Item("Item_9").Top;
+                //this.UIAPIRawForm.Items.Item("Item_2").Top = VoyageStaticTextTop + VoyageStaticTextHeight + 5;
+                //this.UIAPIRawForm.Items.Item("Item_5").Top = this.UIAPIRawForm.Items.Item("Item_2").Top;
+                //this.UIAPIRawForm.Items.Item("Item_11").Top = this.UIAPIRawForm.Items.Item("Item_2").Top;
+                //this.UIAPIRawForm.Items.Item("Item_12").Top = this.UIAPIRawForm.Items.Item("Item_2").Top;
 
-                this.UIAPIRawForm.Items.Item("Item_8").Top = statusTop;
-                this.UIAPIRawForm.Items.Item("Item_7").Top = statusTop;
-                this.UIAPIRawForm.Items.Item("Item_6").Top = hblVoyageTop;
-                this.UIAPIRawForm.Items.Item("Item_3").Top = hblVoyageTop;
-                this.UIAPIRawForm.Items.Item("Item_5").Top = hblPolTop;
-                this.UIAPIRawForm.Items.Item("Item_2").Top = hblPolTop;
-                this.UIAPIRawForm.Items.Item("Item_4").Top = srvTop;
-                this.UIAPIRawForm.Items.Item("Item_1").Top = srvTop;
+                //this.UIAPIRawForm.Items.Item("Item_3").Top = this.UIAPIRawForm.Items.Item("Item_2").Top + this.UIAPIRawForm.Items.Item("Item_2").Height + 5;
+                //this.UIAPIRawForm.Items.Item("Item_6").Top = this.UIAPIRawForm.Items.Item("Item_3").Top;
+                //this.UIAPIRawForm.Items.Item("Item_19").Top = this.UIAPIRawForm.Items.Item("Item_3").Top;
+                //this.UIAPIRawForm.Items.Item("Item_13").Top = this.UIAPIRawForm.Items.Item("Item_3").Top;
+                //this.UIAPIRawForm.Items.Item("Item_14").Top = this.UIAPIRawForm.Items.Item("Item_3").Top;
 
-                int voyageTop = this.UIAPIRawForm.Items.Item("Item_1").Top;
-                int podTop = this.UIAPIRawForm.Items.Item("Item_3").Top;
 
-                this.UIAPIRawForm.Items.Item("Item_17").Top = voyageTop;
-                this.UIAPIRawForm.Items.Item("Item_19").Top = podTop;
+                //this.UIAPIRawForm.Items.Item("Item_7").Top = this.UIAPIRawForm.Items.Item("Item_3").Top + this.UIAPIRawForm.Items.Item("Item_3").Height + 5;
+                //this.UIAPIRawForm.Items.Item("Item_8").Top = this.UIAPIRawForm.Items.Item("Item_7").Top;
+                //this.UIAPIRawForm.Items.Item("Item_15").Top = this.UIAPIRawForm.Items.Item("Item_7").Top;
+                //this.UIAPIRawForm.Items.Item("Item_16").Top = this.UIAPIRawForm.Items.Item("Item_7").Top;
 
-                this.UIAPIRawForm.Items.Item("Item_0").Top = 10;// formHeight - (formHeight - editTop) - gridHeight - 10;
-                this.UIAPIRawForm.Items.Item("Item_0").Height = voyageTop - 20;
+
+                //this.UIAPIRawForm.Items.Item("Item_18").Top = this.UIAPIRawForm.Items.Item("Item_15").Top + this.UIAPIRawForm.Items.Item("Item_15").Height + 5;
+                //this.UIAPIRawForm.Items.Item("Item_20").Top = this.UIAPIRawForm.Items.Item("Item_18").Top;
+                //this.UIAPIRawForm.Items.Item("Item_21").Top = this.UIAPIRawForm.Items.Item("Item_18").Top;
+                //this.UIAPIRawForm.Items.Item("Item_22").Top = this.UIAPIRawForm.Items.Item("Item_18").Top;
+
+
+                //this.UIAPIRawForm.Items.Item("Item_4").Left = this.UIAPIRawForm.Items.Item("Item_1").Left + this.UIAPIRawForm.Items.Item("Item_1").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_5").Left = this.UIAPIRawForm.Items.Item("Item_4").Left;
+                //this.UIAPIRawForm.Items.Item("Item_6").Left = this.UIAPIRawForm.Items.Item("Item_4").Left;
+                //this.UIAPIRawForm.Items.Item("Item_8").Left = this.UIAPIRawForm.Items.Item("Item_4").Left;
+
+
+                //this.UIAPIRawForm.Items.Item("Item_17").Left = this.UIAPIRawForm.Items.Item("Item_4").Left + this.UIAPIRawForm.Items.Item("Item_4").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_19").Left = this.UIAPIRawForm.Items.Item("Item_17").Left;
+
+                //this.UIAPIRawForm.Items.Item("Item_9").Left = this.UIAPIRawForm.Items.Item("Item_17").Left + this.UIAPIRawForm.Items.Item("Item_17").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_11").Left = this.UIAPIRawForm.Items.Item("Item_9").Left;
+                //this.UIAPIRawForm.Items.Item("Item_13").Left = this.UIAPIRawForm.Items.Item("Item_9").Left;
+                //this.UIAPIRawForm.Items.Item("Item_15").Left = this.UIAPIRawForm.Items.Item("Item_9").Left;
+                //this.UIAPIRawForm.Items.Item("Item_18").Left = this.UIAPIRawForm.Items.Item("Item_9").Left;
+
+                //this.UIAPIRawForm.Items.Item("Item_10").Left = this.UIAPIRawForm.Items.Item("Item_9").Left + this.UIAPIRawForm.Items.Item("Item_9").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_12").Left = this.UIAPIRawForm.Items.Item("Item_10").Left;
+                //this.UIAPIRawForm.Items.Item("Item_14").Left = this.UIAPIRawForm.Items.Item("Item_10").Left;
+                //this.UIAPIRawForm.Items.Item("Item_16").Left = this.UIAPIRawForm.Items.Item("Item_10").Left;
+
+
+                //this.UIAPIRawForm.Items.Item("Item_20").Left = this.UIAPIRawForm.Items.Item("Item_18").Left + this.UIAPIRawForm.Items.Item("Item_18").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_21").Left = this.UIAPIRawForm.Items.Item("Item_20").Left + this.UIAPIRawForm.Items.Item("Item_20").Width + 5;
+                //this.UIAPIRawForm.Items.Item("Item_22").Left = this.UIAPIRawForm.Items.Item("Item_21").Left + this.UIAPIRawForm.Items.Item("Item_21").Width + 5; 
+                #endregion
+
+                #region Yeni
+
+                var form = this.UIAPIRawForm;
+                var items = form.Items;
+                var grid = Grid0.Item;
+
+                int margin = 10;
+                int gap = 5;
+
+          
+                int formHeight = form.Height;
+
+                grid.Top = margin;
+                grid.Left = margin;
+                grid.Height = (formHeight * 3) / 4;
+                grid.Width = form.Width - (margin * 5); 
+
+           
+                var i1 = items.Item("Item_1");
+                var i2 = items.Item("Item_2");
+                var i3 = items.Item("Item_3");
+                var i4 = items.Item("Item_4");
+                var i5 = items.Item("Item_5");
+                var i6 = items.Item("Item_6");
+                var i7 = items.Item("Item_7");
+                var i8 = items.Item("Item_8");
+                var i9 = items.Item("Item_9");
+                var i10 = items.Item("Item_10");
+                var i11 = items.Item("Item_11");
+                var i12 = items.Item("Item_12");
+                var i13 = items.Item("Item_13");
+                var i14 = items.Item("Item_14");
+                var i15 = items.Item("Item_15");
+                var i16 = items.Item("Item_16");
+                var i17 = items.Item("Item_17");
+                var i18 = items.Item("Item_18");
+                var i19 = items.Item("Item_19");
+                var i20 = items.Item("Item_20");
+                var i21 = items.Item("Item_21");
+                var i22 = items.Item("Item_22");
+
+             
+                i1.Top = grid.Top + grid.Height + gap ;
+                i1.Left = grid.Left;
+                i2.Left = grid.Left;
+                i3.Left = grid.Left;
+                i7.Left = grid.Left;
+         
+                int row1Top = i1.Top;
+                int row2Top = row1Top + i1.Height + gap;
+                int row3Top = row2Top + i2.Height + gap;
+                int row4Top = row3Top + i3.Height + gap;
+                int row5Top = row4Top + i7.Height + gap;
+
+           
+
+                // Row1
+                i4.Top = i17.Top = i9.Top = i10.Top = row1Top;
+
+                // Row2
+                i2.Top = i5.Top = i11.Top = i12.Top = row2Top;
+
+                // Row3
+                i3.Top = i6.Top = i19.Top = i13.Top = i14.Top = row3Top;
+
+                // Row4
+                i7.Top = i8.Top = i15.Top = i16.Top = row4Top;
+
+                // Row5
+                i18.Top = i20.Top = i21.Top = i22.Top = row5Top;
+
+           
+                int col1Left = i1.Left;
+                int col2Left = col1Left + i1.Width + gap;
+                int col3Left = col2Left + i4.Width + gap;
+                int col4Left = col3Left + i17.Width + gap;
+                int col5Left = col4Left + i9.Width + gap;
+
+               
+
+                // Column 2
+                i4.Left = i5.Left = i6.Left = i8.Left = col2Left;
+
+                // Column 3
+                i17.Left = i19.Left = col3Left + 5;
+
+                // Column 4
+                i9.Left = i11.Left = i13.Left = i15.Left = i18.Left = col4Left + 5;
+
+                // Column 5
+                i10.Left = i12.Left = i14.Left = i16.Left = col5Left;
+
+                // Success / Error alanı
+                i20.Left = col4Left + i18.Width + gap;
+                i21.Left = i20.Left + i20.Width + gap;
+                i22.Left = i21.Left + i21.Width + gap;
+
+
+
+                #endregion
+
+
             }
             catch (Exception ex)
             {
                 SAPbouiCOM.Framework.Application.SBO_Application.MessageBox("An error occurred in form sizing! " + ex.ToString());
             }
-            
+
+        }
+        private void ApplyLayout()
+        {
+         
         }
     }
 }
