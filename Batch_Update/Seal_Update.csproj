@@ -8,8 +8,8 @@
     <ProjectGuid>{872843C8-1AD9-4122-80C3-B208B794A04F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Batch_Update</RootNamespace>
-    <AssemblyName>Batch_Update</AssemblyName>
+    <RootNamespace>Seal_Update</RootNamespace>
+    <AssemblyName>Seal_Update</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Batch_Update.Program</StartupObject>
+    <StartupObject>Seal_Update.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -77,7 +77,7 @@
   <ItemGroup>
     <Reference Include="SAPBusinessOneSDK, Version=1.1.0.1, Culture=neutral, PublicKeyToken=c7c3cb60e45d119f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\sap\SAP Business One\SAPBusinessOneSDK.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\sap\SAP Business One\SAPBusinessOneSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -91,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="B1s\Batch_Update.b1s" />
     <None Include="Form1.b1f">
       <FormCategory>UserForm</FormCategory>
     </None>
@@ -107,6 +106,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="B1s\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

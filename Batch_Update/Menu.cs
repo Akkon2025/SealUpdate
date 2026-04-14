@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using SAPbouiCOM.Framework;
+using Seal_Update;
 
-namespace Batch_Update
+namespace Seal_Update
 {
     class Menu
     {

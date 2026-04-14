@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Batch_Update
+namespace Seal_Update
 {
     class ComboList
     {

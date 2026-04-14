@@ -4,10 +4,11 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using SAPbouiCOM.Framework;
+using Seal_Update;
 
-namespace Batch_Update
+namespace Seal_Update
 {
-    [FormAttribute("Batch_Update.Form1", "Form1.b1f")]
+    [FormAttribute("Seal_Update.Form1", "Form1.b1f")]
     class Form1 : UserFormBase
     {
         public Form1()

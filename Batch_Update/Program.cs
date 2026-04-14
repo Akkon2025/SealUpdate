@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SAPbouiCOM.Framework;
 
-namespace Batch_Update
+namespace Seal_Update
 {
     class Program
     {
@@ -11,7 +11,7 @@ namespace Batch_Update
         public static SAPbouiCOM.Application SBO_Application { get; set; }
         /// <summary>
         /// The main entry point for the application.
-        /// </summary>
+        /// </summary>//
         [STAThread]
         static void Main(string[] args)
         {

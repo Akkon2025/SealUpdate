@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Batch_Update.Helper
+namespace Seal_Update.Helper
 {
     public class openFolderDialog
     {

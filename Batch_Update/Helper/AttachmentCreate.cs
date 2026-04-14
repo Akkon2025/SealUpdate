@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 
 
-namespace Batch_Update.Helper
+namespace Seal_Update.Helper
 {
     public class AttachmentCreate
     {
