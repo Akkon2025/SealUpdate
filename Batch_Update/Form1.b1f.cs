@@ -107,7 +107,7 @@ namespace Seal_Update
             string hblvoy = EditText6.Value;
             string status = ComboBox2.Value;
 
-            string sql = "select DISTINCT  T0.\"DocEntry\"  as \"DocEntry\",  T1.\"VisOrder\"  ,U_BLAKKONNO as \" BL Akkon No \" ,T1.U_CONTAINERNO as \"Container No\", T1.U_SEALNO AS \"Seal No\" , T1.\"U_VGM\" AS \"VGM\",T1.\"U_FULLEMPTY\" AS \"FULLEMPTY\"  FROM ORDR T0 LEFT JOIN RDR1 T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" WHERE T0.U_VOYAGE = '" + voyage + "'";
+            string sql = "select DISTINCT  T0.\"DocEntry\"  as \"DocEntry\",  T1.\"VisOrder\"  ,U_BLAKKONNO as \" BL Akkon No \" ,T1.U_CONTAINERNO as \"Container No\", T1.U_SEALNO AS \"Seal No\" , T1.\"U_VGM\" AS \"VGM\",T1.\"U_FULLEMPTY\" AS \"FULLEMPTY\", " + "CAST('' AS NVARCHAR(500)) AS \"Status Message\" " + "FROM ORDR T0 LEFT JOIN RDR1 T1 ON T1.\"DocEntry\" = T0.\"DocEntry\" WHERE T0.U_VOYAGE = '" + voyage + "'";
 
             if (pol != "")
             {
@@ -149,7 +149,8 @@ namespace Seal_Update
             Grid0.Columns.Item(2).Editable = false;
             Grid0.Columns.Item(3).Editable = false;
             Grid0.Columns.Item(6).Editable = false;
-            //Grid0.Columns.Item(7).Editable = false;
+            Grid0.Columns.Item(7).Editable = false;
+            Grid0.Columns.Item(7).TitleObject.Sortable = true;
             Logger.Log("Listeleme geldi");
         }
 
@@ -176,11 +177,18 @@ namespace Seal_Update
                 {
                     int successCount = 0;
                     int failCount = 0;
+                    var errorMessages = new Dictionary<string, string>();
+
+                    var processedKeys = new HashSet<string>();
+                    var successKeys = new HashSet<string>();
 
                     for (int i = 0; i < Grid0.Rows.Count; i++)
                     {
                         if (Grid0.Rows.IsSelected(i))
                         {
+                            string rowKey = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(1).Cells.Item(i).Value.ToString();
+                            processedKeys.Add(rowKey);
+
                             try
                             {
                                 SAPbobsCOM.Documents oSalesOrder = (SAPbobsCOM.Documents)oCompany.GetBusinessObject(SAPbobsCOM.BoObjectTypes.oOrders); //sales order dökümanına bağlanıyor 
@@ -198,17 +206,21 @@ namespace Seal_Update
 
                                 if (ret != 0)
                                 {
-                                    string errMsg = oCompany.GetLastErrorDescription();
-
+                                    string errMsg = oCompany.GetLastErrorDescription(); 
                                     Logger.Log($"{cntNo} için hata: {errMsg}");
-                                    // Grid0.DataTable.SetValue(7, i, errMsg);
+
+                                    string key = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString()  + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                                    errorMessages[key] = errMsg;
+                                     
+                                    Grid0.DataTable.SetValue(7, i, errMsg);
+                                    
                                     if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
                                     {
                                         oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "3";// "Failed";
                                         oSalesOrder.Update();
                                         failCount++;
                                     }
-
+                                  
                                     Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
 
                                     continue;
@@ -221,8 +233,11 @@ namespace Seal_Update
                                         oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "2";// "Success";
                                         oUpdateDoc.Update();
                                         successCount++;
+                                        string successKey = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                                        successKeys.Add(successKey);
+                                     
                                     }
-
+                                    Grid0.DataTable.SetValue(7, i, "Success");
                                 }
                             }
                             catch (Exception ex)
@@ -247,7 +262,9 @@ namespace Seal_Update
                             U_BLAKKONNO AS ""BL Akkon No"",  
                             T1.U_CONTAINERNO AS ""Container No"",  
                             T1.U_SEALNO AS ""Seal No"",  
-                            T1.""U_VGM"" AS ""VGM""
+                            T1.""U_VGM"" AS ""VGM"",
+                            T1.""U_FULLEMPTY"" AS ""FULLEMPTY"",
+                            CAST('' AS NVARCHAR(500)) AS ""Status Message"" 
                         FROM ORDR T0
                         LEFT JOIN RDR1 T1 ON T1.""DocEntry"" = T0.""DocEntry""
                         WHERE 
@@ -267,6 +284,7 @@ namespace Seal_Update
                     dt.ExecuteQuery(sql);
                     Grid0.DataTable = dt;
 
+                    
                     #region gereksiz kod tekrarı vardı. yukardaki sorguyla değiştirildi.
 
 
@@ -295,10 +313,32 @@ namespace Seal_Update
                     Grid0.Columns.Item(3).Editable = false;
                     EditText3.Value = successCount.ToString();
                     EditText4.Value = failCount.ToString();
-                    // Grid0.Columns.Item(7).Editable = false;
+                    Grid0.Columns.Item(7).Editable = false;
+                    Grid0.Columns.Item(7).TitleObject.Sortable = true;
+
+                    for (int i = 0; i < Grid0.Rows.Count; i++)
+                    { 
+                        string key = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                         
+
+                        if (errorMessages.ContainsKey(key))
+                        {
+                            Grid0.DataTable.SetValue(7, i, errorMessages[key]);
+                            Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                        }
+                        else if (successKeys.Contains(key))
+                        {
+                            Grid0.DataTable.SetValue(7, i, "Success");
+                            Grid0.CommonSetting.SetRowBackColor(i + 1, 65280);
+                        }
+ 
+                    }
+
+
                 }
                 catch (Exception ex)
                 {
+                  
                     Application.SBO_Application.MessageBox("Error Code = 5002 - " + cntNo + ex.ToString());
                 }
             }
@@ -310,6 +350,8 @@ namespace Seal_Update
                 int failCount = 0;
 
                 int totalRows = Grid0.Rows.Count;
+                var errorMessages = new Dictionary<string, string>();
+                var successKeys = new HashSet<string>();
 
                 #region 20.11.2025 kod iyileştirmesi özge
 
@@ -339,13 +381,18 @@ namespace Seal_Update
                         Logger.Log(containerNo + "için: " + errMsg.ToString());
                         Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
                         //Grid0.DataTable.Columns.Item(7).Cells.Item(i).Value = errMsg.ToString();
+                        string key = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                        errorMessages[key] = errMsg;
+                         
+                        Grid0.DataTable.SetValue(7, i, errMsg);
+
                         if (oSalesOrder.GetByKey(Convert.ToInt32(Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value)))
                         {
                             oSalesOrder.UserFields.Fields.Item("U_SealStatus").Value = "3";// "Failed";
                             oSalesOrder.Update();
                             failCount++;
                         }
-
+                        Grid0.DataTable.Columns.Item(7).Cells.Item(i).Value = errMsg.ToString();
                         Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
 
                         continue;
@@ -358,8 +405,10 @@ namespace Seal_Update
                             oUpdateDoc.UserFields.Fields.Item("U_SealStatus").Value = "2";// "Success";
                             oUpdateDoc.Update();
                             successCount++;
+                            string successKey = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                            successKeys.Add(successKey);
                         }
-
+                        Grid0.DataTable.SetValue(7, i, "Success");
                     }
 
 
@@ -453,7 +502,9 @@ namespace Seal_Update
                             U_BLAKKONNO AS ""BL Akkon No"",  
                             T1.U_CONTAINERNO AS ""Container No"",  
                             T1.U_SEALNO AS ""Seal No"",  
-                            T1.""U_VGM"" AS ""VGM""
+                            T1.""U_VGM"" AS ""VGM"",
+                            T1.""U_FULLEMPTY"" AS ""FULLEMPTY"",
+                            CAST('' AS NVARCHAR(500)) AS ""Status Message"" 
                         FROM ORDR T0
                         LEFT JOIN RDR1 T1 ON T1.""DocEntry"" = T0.""DocEntry""
                         WHERE 
@@ -499,10 +550,27 @@ namespace Seal_Update
                     Grid0.Columns.Item(3).Editable = false;
                     EditText3.Value = successCount.ToString();
                     EditText4.Value = failCount.ToString();
-                    // Grid0.Columns.Item(7).Editable = false;
+                    Grid0.Columns.Item(7).Editable = false;
+                    Grid0.Columns.Item(7).TitleObject.Sortable = true;
+
+                    for (int i = 0; i < Grid0.Rows.Count; i++)
+                    {
+                        string key = Grid0.DataTable.Columns.Item(0).Cells.Item(i).Value.ToString() + "_" + Grid0.DataTable.Columns.Item(3).Cells.Item(i).Value.ToString();
+                        if (errorMessages.ContainsKey(key))
+                        {
+                            Grid0.DataTable.SetValue(7, i, errorMessages[key]);
+                            Grid0.CommonSetting.SetRowBackColor(i + 1, 255);
+                        }
+                        else if (successKeys.Contains(key))
+                        {
+                            Grid0.DataTable.SetValue(7, i, "Success");
+                            Grid0.CommonSetting.SetRowBackColor(i + 1, 65280);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
+                    
                     Application.SBO_Application.MessageBox("Error Code = 5001 - " + containerNo + ex.ToString());
                 }
 
