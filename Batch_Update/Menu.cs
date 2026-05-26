@@ -50,8 +50,13 @@ namespace Seal_Update
                 oMenus = oMenuItem.SubMenus;
 
                 // Create s sub menu
+                //oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
+                //oCreationPackage.UniqueID = "Seal_Update.Form1";
+                //oCreationPackage.String = "Seal Update";
+                //oMenus.AddEx(oCreationPackage);
+
                 oCreationPackage.Type = SAPbouiCOM.BoMenuType.mt_STRING;
-                oCreationPackage.UniqueID = "Seal_Update.Form1";
+                oCreationPackage.UniqueID = "Seal_Update.Form2";
                 oCreationPackage.String = "Seal Update";
                 oMenus.AddEx(oCreationPackage);
             }
@@ -67,9 +72,15 @@ namespace Seal_Update
 
             try
             {
-                if (pVal.BeforeAction && pVal.MenuUID == "Seal_Update.Form1")
+                //if (pVal.BeforeAction && pVal.MenuUID == "Seal_Update.Form1")
+                //{
+                //    Form1 activeForm = new Form1();
+                //    activeForm.Show();
+                //}
+               
+                if (pVal.BeforeAction && pVal.MenuUID == "Seal_Update.Form2")
                 {
-                    Form1 activeForm = new Form1();
+                    Form2 activeForm = new Form2();
                     activeForm.Show();
                 }
             }

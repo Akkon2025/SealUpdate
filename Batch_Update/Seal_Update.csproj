@@ -97,6 +97,9 @@
     <Compile Include="Form1.b1f.cs">
       <DependentUpon>Form1.b1f</DependentUpon>
     </Compile>
+    <Compile Include="Form2.b1f.cs">
+      <DependentUpon>Form2.b1f</DependentUpon>
+    </Compile>
     <Compile Include="Helper\AttachmentCreate.cs" />
     <Compile Include="Helper\ChildTable.cs" />
     <Compile Include="Helper\ComboList.cs" />
@@ -106,6 +109,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Form2.b1f">
+      <FormCategory>UserForm</FormCategory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="B1s\" />
